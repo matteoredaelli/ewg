@@ -1,0 +1,14 @@
+h1. Erlang Wordlist Generator
+
+h2. Quick start
+
+* Download ewg from github
+* cd ewg
+* edit options in src/ewg.hrl
+* make clean && make
+* ./start_server.sh
+* lunch in your preferred broser http://localhost:8000/ewg/
+* click on "Start generator"
+* see stdout for logs
+* see words.txt for geneated words
+
