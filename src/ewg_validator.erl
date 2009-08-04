@@ -91,9 +91,9 @@ handle_call({is_valid, Word}, _From, State) ->
     {reply, Reply, NewState};
 
 handle_call({statistics}, _From, State) ->
-    Reply = "Candidate=" ++ 
+    Reply = "Validator: candidate=" ++ 
 	integer_to_list(State#state.candidate) ++
-	", Valid=" ++ 
+	", valid=" ++ 
 	integer_to_list(State#state.valid),
     NewState = State,
     {reply, Reply, NewState};

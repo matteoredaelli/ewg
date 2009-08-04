@@ -14,13 +14,13 @@
 -define(SERVER, ?MODULE).
 
 %% API
--export([start_link/0, generate_words/1]).
+-export([start_link/0, generate_words/1, statistics/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
 	 terminate/2, code_change/3]).
 
--record(state, {}).
+-record(state, {count=0}).
 
 %%====================================================================
 %% API
@@ -34,6 +34,9 @@ start_link() ->
 
 generate_words(Word) ->
     gen_server:cast(?MODULE, {generate_words, Word}).
+
+statistics() ->
+    gen_server:call(?MODULE, {statistics}).
 
 %%====================================================================
 %% gen_server callbacks
@@ -59,6 +62,12 @@ init([]) ->
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
 
+handle_call({statistics}, _From, State) ->
+    Reply = "Generator: count=" ++ 
+	integer_to_list(State#state.count),
+    NewState = State,
+    {reply, Reply, NewState};
+
 handle_call(_Request, _From, State) ->
     Reply = ok,
     {reply, Reply, State}.
@@ -70,6 +79,7 @@ handle_call(_Request, _From, State) ->
 %% Description: Handling cast messages
 %%--------------------------------------------------------------------
 handle_cast({generate_words, Word}, State) ->
+    NewState = State#state{count = State#state.count + 1},
     case ewg_validator:is_valid(Word) of
  	true ->
 	    ewg_dumper:dump(Word);
@@ -82,7 +92,8 @@ handle_cast({generate_words, Word}, State) ->
 	false -> 
 	    io:fwrite("No candidate word: Skipping '~s'~n", [Word])
     end,
-    {noreply, State};
+    {noreply, NewState};
+
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
