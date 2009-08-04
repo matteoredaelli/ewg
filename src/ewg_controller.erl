@@ -1,12 +1,12 @@
 %%
 %% Sample default "/" controller, implement this to your needs
 %%
--module(home_controller,[Env]).
+-module(ewg_controller,[Env]).
 
 -export([handle_request/2,before_filter/0]).
 
 handle_request("index",[]) ->
-    {render,"home/index.html",[{data,"Hello There From EWG!"}]};
+    {render,"index.html",[{data,"Hello There From EWG!"}]};
 
 handle_request("go",[]) ->
     ewg_generator:generate_words(""),
@@ -14,15 +14,7 @@ handle_request("go",[]) ->
 
 handle_request("show_options",[]) ->
     ewg_dumper:dump_options(),
-    {render,"home/index.html",[{data,"See stdout!"}]};
-
-handle_request("show",[Year]) ->
-    Sid = beepbeep_args:get_session_id(Env),
-    Name = beepbeep_args:get_param("name",Env),
-
-    beepbeep_args:flash({notice,"Example of a flash message between actions. See flash.html!"},Env),
-    
-    {render,"home/show.html",[{year,Year},{sid,Sid},{name,Name}]}.
+    {render,"home/index.html",[{data,"See stdout!"}]}.
 
 
 before_filter() ->
