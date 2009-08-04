@@ -15,13 +15,13 @@
 -define(SERVER, ?MODULE).
 
 %% API
--export([start_link/0, dump/1, dump_options/0]).
+-export([start_link/0, dump/1, dump_options/0, statistics/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
 	 terminate/2, code_change/3]).
 
--record(state, {}).
+-record(state, {count=0}).
 
 %%====================================================================
 %% API
@@ -34,9 +34,12 @@ start_link() ->
     gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 dump(Word) ->
     gen_server:call(?MODULE, {dump, Word}).
+
 dump_options() ->
     gen_server:call(?MODULE, {get_options}).
 
+statistics() ->
+    gen_server:call(?MODULE, {statistics}).
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -61,17 +64,23 @@ init([]) ->
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
 handle_call({dump, Word}, _From, State) ->
+    NewState = State#state{count = State#state.count + 1},
     {ok, WriteDescr} = file:open(?WORDS_FILE, [raw, append]), 
     file:write(WriteDescr, Word ++ "\n"), 
     file:close(WriteDescr),
     Reply = ok,
-    NewState = State,
     {reply, Reply, NewState};
 
 handle_call({dump_options}, _From, State) ->
     io:fwrite("Characters: '~s'~n", [?CHARACTERS]),
     Reply = ok,
     {reply, Reply, State};
+
+handle_call({statistics}, _From, State) ->
+    Reply = "Dumper: count=" ++ 
+	integer_to_list(State#state.count),
+    NewState = State,
+    {reply, Reply, NewState};
 
 handle_call(_Request, _From, State) ->
     Reply = ok,

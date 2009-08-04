@@ -1,5 +1,8 @@
 h1. Erlang Wordlist Generator
 
+A wordlist generator written in Erlang. 
+It uses BeepBeep (and Michiweb) as web/restful frontend.
+
 h2. Quick start
 
 * Download ewg from github
@@ -12,3 +15,8 @@ h2. Quick start
 * see stdout for logs
 * see words.txt for geneated words
 
+h2. Internals
+
+h2. License
+
+GPL V3

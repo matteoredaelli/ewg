@@ -17,9 +17,13 @@ handle_request("options",[]) ->
     {render,"ewg/index.html",[{data,"See stdout!"}]};
 
 handle_request("statistics",[]) ->
-    Stats = ewg_generator:statistics() ++ 
-	"," ++ 
-	ewg_validator:statistics(),
+    Stats = 
+	"<h2>STATISTICS</h2>" ++
+	ewg_generator:statistics() ++ 
+	"<br/>" ++ 
+	ewg_validator:statistics() ++
+	"<br/>" ++ 
+	ewg_dumper:statistics(),
     {render,"ewg/index.html",[{data,Stats}]}.
 
 before_filter() ->
