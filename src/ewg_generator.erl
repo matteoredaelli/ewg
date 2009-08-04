@@ -2,6 +2,7 @@
 %%% File    : ewg_generator.erl
 %%% Author  : Matteo Redaelli <matteo.redaelli@libero.it>
 %%% Description : 
+%%% License: GPL V3
 %%%
 %%% Created :  3 Aug 2009 by Matteo Redaelli <matteo.redaelli@libero.it>
 %%%-------------------------------------------------------------------
