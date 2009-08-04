@@ -83,7 +83,7 @@ handle_cast({generate_words, Word}, State) ->
     NewState = State#state{count = State#state.count + 1},
     case ewg_validator:is_valid(Word) of
  	true ->
-	    ewg_dumper:dump(Word);
+	    ewg_dumper:dump_valid_word(Word);
 	false -> 
 	    io:fwrite("No valid word: Skipping '~s'~n", [Word])
     end,

@@ -1,5 +1,5 @@
 %%
-%% Sample default "/" controller, implement this to your needs
+%% 
 %%
 -module(ewg_controller,[Env]).
 
@@ -13,7 +13,7 @@ handle_request("run",[]) ->
     {render,"ewg/index.html",[{data,"Wordlist generation just started!"}]};
 
 handle_request("options",[]) ->
-    ewg_dumper:dump_options(),
+    ewg_dumper:options(),
     {render,"ewg/index.html",[{data,"See stdout!"}]};
 
 handle_request("statistics",[]) ->

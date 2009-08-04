@@ -15,7 +15,7 @@
 -define(SERVER, ?MODULE).
 
 %% API
--export([start_link/0, dump/1, dump_options/0, statistics/0]).
+-export([start_link/0, dump_valid_word/1, options/0, statistics/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
@@ -32,11 +32,12 @@
 %%--------------------------------------------------------------------
 start_link() ->
     gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
-dump(Word) ->
-    gen_server:call(?MODULE, {dump, Word}).
 
-dump_options() ->
-    gen_server:call(?MODULE, {get_options}).
+dump_valid_word(Word) ->
+    gen_server:call(?MODULE, {dump_valid_word, Word}).
+
+options() ->
+    gen_server:call(?MODULE, {options}).
 
 statistics() ->
     gen_server:call(?MODULE, {statistics}).
@@ -63,7 +64,7 @@ init([]) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
-handle_call({dump, Word}, _From, State) ->
+handle_call({dump_valid_word, Word}, _From, State) ->
     NewState = State#state{count = State#state.count + 1},
     {ok, WriteDescr} = file:open(?WORDS_FILE, [raw, append]), 
     file:write(WriteDescr, Word ++ "\n"), 
@@ -71,7 +72,7 @@ handle_call({dump, Word}, _From, State) ->
     Reply = ok,
     {reply, Reply, NewState};
 
-handle_call({dump_options}, _From, State) ->
+handle_call({options}, _From, State) ->
     io:fwrite("Characters: '~s'~n", [?CHARACTERS]),
     Reply = ok,
     {reply, Reply, State};
