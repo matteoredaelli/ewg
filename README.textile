@@ -5,7 +5,7 @@ It uses BeepBeep (and Michiweb) as web/restful frontend.
 
 h2. Authors
 
-* Matteo Redaelli: http://www.redaelli.org/matteo/
+* Matteo Redaelli: [http://www.redaelli.org/matteo/]
 
 h2. Prerequisites
 
@@ -14,7 +14,7 @@ h2. Prerequisites
  
 h2. Quick start
 
-See the wiki at http://wiki.github.com/matteoredaelli/ewg
+See the wiki at [http://wiki.github.com/matteoredaelli/ewg]
 
 h2. License
 

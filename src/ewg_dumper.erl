@@ -67,7 +67,7 @@ init([]) ->
 handle_call({dump_valid_word, Word}, _From, State) ->
     NewState = State#state{count = State#state.count + 1},
     {ok, WriteDescr} = file:open(?WORDS_FILE, [raw, append]), 
-    file:write(WriteDescr, Word ++ "\n"), 
+    file:write(WriteDescr, ?PREFIX ++ Word ++ ?POSTFIX ++ "\n"), 
     file:close(WriteDescr),
     Reply = ok,
     {reply, Reply, NewState};
