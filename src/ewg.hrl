@@ -9,4 +9,6 @@
 
 -define(CHAR_OCCURS, [{"a",1,4},{"bc",0,3}]).
 
+-define(MAX_CONSECUTIVE_CHAR_OCCURS, [{"a",1},{"bc",2}]).
+
 -define(WORDS_FILE, "/tmp/words.txt").
