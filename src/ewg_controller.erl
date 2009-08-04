@@ -12,10 +12,13 @@ handle_request("run",[]) ->
     ewg_generator:generate_words(""),
     {render,"ewg/index.html",[{data,"Wordlist generation just started!"}]};
 
-handle_request("show_options",[]) ->
+handle_request("options",[]) ->
     ewg_dumper:dump_options(),
-    {render,"ewg/index.html",[{data,"See stdout!"}]}.
+    {render,"ewg/index.html",[{data,"See stdout!"}]};
 
+handle_request("statistics",[]) ->
+    Stats = ewg_validator:statistics(),
+    {render,"ewg/index.html",[{data,Stats}]}.
 
 before_filter() ->
     %% Shows how to potentially filter on certain actions in this

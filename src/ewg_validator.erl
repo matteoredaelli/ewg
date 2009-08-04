@@ -14,13 +14,13 @@
 -define(SERVER, ?MODULE).
 
 %% API
--export([start_link/0, is_candidate/1, is_valid/1]).
+-export([start_link/0, is_candidate/1, is_valid/1, statistics/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
 	 terminate/2, code_change/3]).
 
--record(state, {counts=0}).
+-record(state, {candidate=0, valid=0}).
 
 %%====================================================================
 %% API
@@ -38,6 +38,8 @@ is_candidate(Word) ->
 is_valid(Word) ->
     gen_server:call(?MODULE, {is_valid, Word}).
 
+statistics() ->
+    gen_server:call(?MODULE, {statistics}).
 
 %%====================================================================
 %% gen_server callbacks
@@ -65,7 +67,13 @@ init([]) ->
 handle_call({is_candidate, Word}, _From, State) ->
     Reply = is_valid_max_length(Word) andalso
 	is_valid_max_char_occurs(Word),
-    NewState = State,
+    NewState = 
+	case Reply of
+	    true ->
+		State#state{candidate = State#state.candidate + 1};
+	    false ->
+		State
+	end,
     {reply, Reply, NewState};
 
 handle_call({is_valid, Word}, _From, State) ->
@@ -73,6 +81,20 @@ handle_call({is_valid, Word}, _From, State) ->
 	is_valid_max_length(Word) andalso
 	is_valid_min_char_occurs(Word) andalso
 	is_valid_max_char_occurs(Word),
+    NewState = 
+	case Reply of
+	    true ->
+		State#state{valid = State#state.valid + 1};
+	    false ->
+		State
+	end,
+    {reply, Reply, NewState};
+
+handle_call({statistics}, _From, State) ->
+    Reply = "Candidate=" ++ 
+	integer_to_list(State#state.candidate) ++
+	", Valid=" ++ 
+	integer_to_list(State#state.valid),
     NewState = State,
     {reply, Reply, NewState};
 
