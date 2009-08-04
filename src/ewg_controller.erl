@@ -6,15 +6,15 @@
 -export([handle_request/2,before_filter/0]).
 
 handle_request("index",[]) ->
-    {render,"index.html",[{data,"Hello There From EWG!"}]};
+    {render,"ewg/index.html",[{data,"Hello There From EWG!"}]};
 
-handle_request("go",[]) ->
+handle_request("run",[]) ->
     ewg_generator:generate_words(""),
-    {render,"home/index.html",[{data,"Wordlist generation just started!"}]};
+    {render,"ewg/index.html",[{data,"Wordlist generation just started!"}]};
 
 handle_request("show_options",[]) ->
     ewg_dumper:dump_options(),
-    {render,"home/index.html",[{data,"See stdout!"}]}.
+    {render,"ewg/index.html",[{data,"See stdout!"}]}.
 
 
 before_filter() ->
