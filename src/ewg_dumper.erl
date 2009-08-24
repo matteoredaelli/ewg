@@ -15,7 +15,7 @@
 -define(SERVER, ?MODULE).
 
 %% API
--export([start_link/0, dump_valid_word/1, options/0, statistics/0]).
+-export([start_link/0, dump_valid_word/1, options/0, statistics/0, delete_dump_file/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
@@ -32,6 +32,9 @@
 %%--------------------------------------------------------------------
 start_link() ->
     gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+
+delete_dump_file() ->
+    gen_server:call(?MODULE, {delete_dump_file}).
 
 dump_valid_word(Word) ->
     gen_server:call(?MODULE, {dump_valid_word, Word}).
@@ -53,6 +56,8 @@ statistics() ->
 %% Description: Initiates the server
 %%--------------------------------------------------------------------
 init([]) ->
+    % deleting WORDS_FILE if it exists
+    delete_dump_file(),
     {ok, #state{}}.
 
 %%--------------------------------------------------------------------
@@ -71,6 +76,10 @@ handle_call({dump_valid_word, Word}, _From, State) ->
     file:close(WriteDescr),
     Reply = ok,
     {reply, Reply, NewState};
+
+handle_call({delete_dump_file}, _From, State) ->
+    Reply = file:delete(?WORDS_FILE),
+    {reply, Reply, State};
 
 handle_call({options}, _From, State) ->
     io:fwrite("Characters: '~s'~n", [?CHARACTERS]),

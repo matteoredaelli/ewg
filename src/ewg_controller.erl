@@ -8,6 +8,10 @@
 handle_request("index",[]) ->
     {render,"ewg/index.html",[{data,"Hello There From EWG!"}]};
 
+handle_request("delete_dump_file",[]) ->
+    ewg_dumper:delete_dump_file(),
+    {render,"ewg/index.html",[{data,"Should be done!"}]};
+
 handle_request("run",[]) ->
     ewg_generator:generate_words(""),
     {render,"ewg/index.html",[{data,"Wordlist generation just started!"}]};
