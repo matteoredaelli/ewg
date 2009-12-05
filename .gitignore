@@ -1,3 +1,5 @@
 *.beam
 *ebin/*
+deps/*/ebin/*
+deps/*/deps/*/ebin/*
 

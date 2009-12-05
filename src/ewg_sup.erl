@@ -1,4 +1,10 @@
+%% @author author <author@example.com>
+%% @copyright YYYY author.
+
+%% @doc Supervisor for the ewg application.
+
 -module(ewg_sup).
+-author('author <author@example.com>').
 
 -behaviour(supervisor).
 
@@ -19,15 +25,15 @@ upgrade() ->
     {ok, {_, Specs}} = init([]),
 
     Old = sets:from_list(
-            [Name || {Name, _, _, _} <- supervisor:which_children(?MODULE)]),
+	    [Name || {Name, _, _, _} <- supervisor:which_children(?MODULE)]),
     New = sets:from_list([Name || {Name, _, _, _, _, _} <- Specs]),
     Kill = sets:subtract(Old, New),
 
     sets:fold(fun (Id, ok) ->
-                      supervisor:terminate_child(?MODULE, Id),
-                      supervisor:delete_child(?MODULE, Id),
-                      ok
-              end, ok, Kill),
+		      supervisor:terminate_child(?MODULE, Id),
+		      supervisor:delete_child(?MODULE, Id),
+		      ok
+	      end, ok, Kill),
 
     [supervisor:start_child(?MODULE, Spec) || Spec <- Specs],
     ok.
@@ -35,33 +41,30 @@ upgrade() ->
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
-    Ip = case os:getenv("MOCHIWEB_IP") of false -> "0.0.0.0"; Any -> Any end,   
+    Ip = case os:getenv("WEBMACHINE_IP") of false -> "0.0.0.0"; Any -> Any end,
+    {ok, Dispatch} = file:consult(filename:join(
+                         [filename:dirname(code:which(?MODULE)),
+                          "..", "priv", "dispatch.conf"])),
     WebConfig = [
 		 {ip, Ip},
-                 {port, 8000}
-                ],
+		 {port, 8000},
+                 {log_dir, "priv/log"},
+		 {dispatch, Dispatch}],
+    Web = {webmachine_mochiweb,
+	   {webmachine_mochiweb, start, [WebConfig]},
+	   permanent, 5000, worker, dynamic},
 
-    %% Sets up the BeepBeep environment. Removing any of the below
-    %% will cause something to break.
-    BaseDir = ewg_deps:get_base_dir(),
+% ewg custom entries - begin
+    WgValidator = {wg_validator,
+           {wg_validator, start_link, []},
+           permanent, 5000, worker, dynamic},
+    WgDumper = {wg_dumper,
+           {wg_dumper, start_link, []},
+           permanent, 5000, worker, dynamic},
+    WgGenerator = {wg_generator,
+           {wg_generator, start_link, []},
+           permanent, 5000, worker, dynamic},
+% ewg custom entries - end
 
-    Web = {ewg_web,
-	   {ewg_web, start, [WebConfig]},
-	   permanent, 5000, worker, dynamic},
-    Router = {beepbeep_router,
-	      {beepbeep_router, start, [BaseDir]},
-	      permanent, 5000, worker, dynamic},
-    SessionServer = {beepbeep_session_server,
-		     {beepbeep_session_server,start,[]},
-		     permanent, 5000, worker, dynamic},
-    EwgValidator = {ewg_validator,
-	   {ewg_validator, start_link, []},
-	   permanent, 5000, worker, dynamic},
-    EwgDumper = {ewg_dumper,
-	   {ewg_dumper, start_link, []},
-	   permanent, 5000, worker, dynamic},
-    EwgGenerator = {ewg_generator,
-	   {ewg_generator, start_link, []},
-	   permanent, 5000, worker, dynamic},
-    Processes = [Router,SessionServer,Web, EwgValidator, EwgDumper, EwgGenerator],
+    Processes = [Web,WgValidator, WgDumper, WgGenerator],
     {ok, {{one_for_one, 10, 10}, Processes}}.

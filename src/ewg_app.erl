@@ -1,4 +1,10 @@
+%% @author author <author@example.com>
+%% @copyright YYYY author.
+
+%% @doc Callbacks for the ewg application.
+
 -module(ewg_app).
+-author('author <author@example.com>').
 
 -behaviour(application).
 -export([start/2,stop/1]).
