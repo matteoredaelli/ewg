@@ -1,5 +1,6 @@
 *.beam
+*.dump
 *ebin/*
 deps/*/ebin/*
 deps/*/deps/*/ebin/*
-
+priv/log/*

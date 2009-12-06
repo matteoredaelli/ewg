@@ -23,8 +23,15 @@ to_text(ReqData, State) ->
     case dict:find(action, Params) of
 	{ok, "generate_words"} ->
 	    wg_generator:generate_words(""),
-	    Result = "Started";
+	    Body = "Started";
+	{ok, "statistics"} ->
+	    Res1 = wg_generator:statistics(),
+	    Res2 = wg_dumper:statistics(),
+	    Res3 = wg_validator:statistics(),
+	    Body = Res1 ++ "\n" ++ Res2 ++ "\n" ++ Res3;
+	{ok, "help"} ->
+	    Body = "Options: generate_word, help, statistics";
 	_Else ->
-	    Result = "Unknown action"
+	    Body = "Unknown action"
     end,
-    {Result, ReqData, State}.
+    {Body, ReqData, State}.
