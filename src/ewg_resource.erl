@@ -1,5 +1,5 @@
-%% @author author <author@example.com>
-%% @copyright YYYY author.
+%% @author author <matteo.redaelli AT libero.it>
+%% @copyright 2009(c) Matteo Redaelli.
 %% @doc Example webmachine_resource.
 
 -module(ewg_resource).

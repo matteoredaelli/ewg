@@ -1,10 +1,10 @@
-%% @author author <author@example.com>
-%% @copyright YYYY author.
+%% @author author <matteo.redaelli AT libero.it>
+%% @copyright 2009(c) Matteo Redaelli.
 
 %% @doc Supervisor for the ewg application.
 
 -module(ewg_sup).
--author('author <author@example.com>').
+-author('author <matteo.redaelli AT libero.it>').
 
 -behaviour(supervisor).
 

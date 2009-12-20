@@ -1,12 +1,12 @@
-%% @author author <author@example.com>
-%% @copyright YYYY author.
+%% @author author <matteo.redaelli AT libero.it>
+%% @copyright 2009(c) Matteo Redaelli.
 
 %% @doc Ensure that the relatively-installed dependencies are on the code
 %%      loading path, and locate resources relative
 %%      to this application's path.
 
 -module(ewg_deps).
--author('author <author@example.com>').
+-author('author <matteo.redaelli AT libero.it>').
 
 -export([ensure/0, ensure/1]).
 -export([get_base_dir/0, get_base_dir/1]).

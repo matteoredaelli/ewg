@@ -1,10 +1,10 @@
-%% @author author <author@example.com>
-%% @copyright YYYY author.
+%% @author author <matteo.redaelli AT libero.it>
+%% @copyright 2009(c) Matteo Redaelli.
 
 %% @doc TEMPLATE.
 
 -module(ewg).
--author('author <author@example.com>').
+-author('author <matteo.redaelli AT libero.it>').
 -export([start/0, start_link/0, stop/0]).
 
 ensure_started(App) ->
