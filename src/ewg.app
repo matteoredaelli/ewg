@@ -1,3 +1,4 @@
+%% -*- mode: erlang -*-
 {application, ewg,
  [{description, "ewg"},
   {vsn, "0.1"},
