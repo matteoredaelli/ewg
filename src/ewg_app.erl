@@ -23,7 +23,7 @@ stop(_State) ->
 
 simple_test() ->
     ok = application:start(ewg),
-    wg_generator:generate_words(""),
+%    wg_generator:generate_words(""),
     ?assertNot(undefined == whereis(ewg_sup)).
 
 -endif.
