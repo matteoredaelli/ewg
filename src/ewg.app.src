@@ -1,0 +1,12 @@
+{application, ewg,
+ [
+  {description, ""},
+  {vsn, "3.0"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { ewg_app, []}},
+  {env, []}
+ ]}.

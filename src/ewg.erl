@@ -28,13 +28,11 @@ start_link() ->
 start() ->
     ewg_deps:ensure(),
     ensure_started(crypto),
-    ensure_started(webmachine),
     application:start(ewg).
 
 %% @spec stop() -> ok
 %% @doc Stop the ewg server.
 stop() ->
     Res = application:stop(ewg),
-    application:stop(webmachine),
     application:stop(crypto),
     Res.

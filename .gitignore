@@ -1,6 +1,9 @@
+.eunit/*
 *.beam
 *.dump
-ebin/*
+*~
 deps/*/ebin/*
 deps/*/deps/*/ebin/*
-priv/log/*
+ebin/*
+rel/ewg/
+src/*~

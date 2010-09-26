@@ -1,22 +1,29 @@
-%% @author author <matteo.redaelli AT libero.it>
-%% @copyright 2009(c) Matteo Redaelli.
-
-%% @doc Callbacks for the ewg application.
-
 -module(ewg_app).
--author('author <matteo.redaelli AT libero.it>').
 
 -behaviour(application).
--export([start/2,stop/1]).
 
+%% Application callbacks
+-export([start/2, stop/1]).
 
-%% @spec start(_Type, _StartArgs) -> ServerRet
-%% @doc application start callback for ewg.
-start(_Type, _StartArgs) ->
-    ewg_deps:ensure(),
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+-endif.
+
+%% ===================================================================
+%% Application callbacks
+%% ===================================================================
+
+start(_StartType, _StartArgs) ->
     ewg_sup:start_link().
 
-%% @spec stop(_State) -> ServerRet
-%% @doc application stop callback for ewg.
 stop(_State) ->
     ok.
+
+-ifdef(TEST).
+
+simple_test() ->
+    ok = application:start(ewg),
+    wg_generator:generate_words(""),
+    ?assertNot(undefined == whereis(ewg_sup)).
+
+-endif.
