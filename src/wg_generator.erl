@@ -10,7 +10,7 @@
 
 -behaviour(gen_server).
 
--include("wg.hrl").
+-include("ewg.hrl").
 
 -define(SERVER, ?MODULE).
 
@@ -51,7 +51,7 @@ statistics() ->
 %% Description: Initiates the server
 %%--------------------------------------------------------------------
 init([]) ->
-%%    spawn(?MODULE, generate_words, [""]),
+    spawn(?MODULE, generate_words, [""]),
     {ok, #state{}}.
 
 %%--------------------------------------------------------------------
@@ -90,7 +90,12 @@ handle_cast({generate_words, Word}, State) ->
     end,
     case wg_validator:is_candidate(Word) of
 	true ->
-	    lists:foreach( fun(X) -> spawn(?MODULE, generate_words, [[X] ++ Word]) end, ?CHARACTERS );
+	    {ok, Characters} = application:get_env(characters),
+	    lists:foreach( 
+	      fun(X) -> 
+		      spawn(?MODULE, generate_words, [[X] ++ Word]) 
+	      end,
+	      Characters);
 	false -> 
 	    io:fwrite("No candidate word: Skipping '~s'~n", [Word])
     end,

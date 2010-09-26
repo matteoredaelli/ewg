@@ -10,7 +10,7 @@
 
 -behaviour(gen_server).
 
--include("wg.hrl").
+-include("ewg.hrl").
 
 -define(SERVER, ?MODULE).
 
@@ -21,7 +21,7 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
 	 terminate/2, code_change/3]).
 
--record(state, {count=0}).
+-record(state, {config, count=0}).
 
 %%====================================================================
 %% API
@@ -53,8 +53,9 @@ statistics() ->
 %% Description: Initiates the server
 %%--------------------------------------------------------------------
 init([]) ->
-    % TODO: deleting WORDS_FILE if it exists.  
-    file:delete(?WORDS_FILE),
+    % TODO: deleting WORDS_FILE if it exists. 
+    {ok, Words_file} = application:get_env(words_file),
+    file:delete(Words_file),
     {ok, #state{}}.
 
 %%--------------------------------------------------------------------
@@ -67,15 +68,19 @@ init([]) ->
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
 handle_call({dump_valid_word, Word}, _From, State) ->
+    {ok, Postfix} = application:get_env(postfix),
+    {ok, Prefix} = application:get_env(prefix),
+    {ok, Words_file} = application:get_env(words_file),
     NewState = State#state{count = State#state.count + 1},
-    {ok, WriteDescr} = file:open(?WORDS_FILE, [raw, append]), 
-    file:write(WriteDescr, ?PREFIX ++ Word ++ ?POSTFIX ++ "\n"), 
+    {ok, WriteDescr} = file:open(Words_file, [raw, append]), 
+    file:write(WriteDescr, Prefix ++ Word ++ Postfix ++ "\n"), 
     file:close(WriteDescr),
     Reply = ok,
     {reply, Reply, NewState};
 
 handle_call({options}, _From, State) ->
-    io:fwrite("Characters: '~s'~n", [?CHARACTERS]),
+    {ok, Characters} = application:get_env(postfix),
+    io:fwrite("Characters: '~s'~n", [Characters]),
     Reply = ok,
     {reply, Reply, State};
 

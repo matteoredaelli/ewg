@@ -10,7 +10,7 @@
 
 -behaviour(gen_server).
 
--include("wg.hrl").
+-include("ewg.hrl").
 
 -define(SERVER, ?MODULE).
 
@@ -145,12 +145,15 @@ code_change(_OldVsn, State, _Extra) ->
 %%--------------------------------------------------------------------
 
 is_valid_min_length(Word) ->
-    length(Word) >=  ?MIN_LENGTH.
+    {ok, Value} = application:get_env(min_length),
+    length(Word) >=  Value.
 
 is_valid_max_length(Word) ->
-    length(Word) =<  ?MAX_LENGTH.
+    {ok, Value} = application:get_env(max_length),
+    length(Word) =<  Value.
 
 is_valid_min_char_occurs(Word) ->
+    {ok, Value} = application:get_env(char_occurs),
     lists:all( fun({String, Min, _Max}) ->
 		       lists:all( fun(Char) ->
 					  N = get_occurrences(Char, Word),
@@ -158,9 +161,10 @@ is_valid_min_char_occurs(Word) ->
 				  end,
 				  String)
 	       end, 
-	       ?CHAR_OCCURS).
+	       Value).
 
 is_valid_max_char_occurs(Word) ->
+    {ok, Value} = application:get_env(char_occurs),
     lists:all( fun({String, _Min, Max}) ->
 		       lists:all( fun(Char) ->
 					  N = get_occurrences(Char, Word),
@@ -168,9 +172,10 @@ is_valid_max_char_occurs(Word) ->
 				  end,
 				  String)
 	       end, 
-	       ?CHAR_OCCURS).
+	       Value).
 
 is_valid_max_consecutive_char_occurs(Word) ->
+    {ok, Value} = application:get_env(max_consecutive_char_occurs),
     lists:all( 
       fun({String, Max}) ->
 	      lists:all( 
@@ -183,7 +188,7 @@ is_valid_max_consecutive_char_occurs(Word) ->
 		end,
 		String)
       end, 
-      ?MAX_CONSECUTIVE_CHAR_OCCURS).    
+      Value).    
 
 get_occurrences(Char, String ) ->
     S = [C || C <- String, C == Char],

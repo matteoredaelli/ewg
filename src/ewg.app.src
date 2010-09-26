@@ -1,3 +1,8 @@
+%% -*- mode: erlang -*-
+
+%% Info about passing params to an erlang app can be found at
+%% http://stackoverflow.com/questions/1213108/erlang-how-to-access-cli-flags-arguments-as-application-environment-variables
+%% http://willcodeforfoo.com/2009/10/04/erlang-application-variables/
 {application, ewg,
  [
   {description, ""},
@@ -8,5 +13,15 @@
                   stdlib
                  ]},
   {mod, { ewg_app, []}},
-  {env, []}
+  {env, [
+	 {characters, "acb"},
+	 {min_length, 1},
+	 {max_length, 4},
+	 {char_occurs, [{"a",1,4},{"bc",0,3}]},
+	 {max_consecutive_char_occurs, [{"a",1},{"bc",2}]},
+	 % dumper options
+	 {words_file, "/tmp/words.txt"},
+	 {prefix, "prefix"},
+	 {postfix, "postfix"}
+  ]}
  ]}.
