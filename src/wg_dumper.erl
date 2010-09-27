@@ -79,8 +79,8 @@ handle_call({dump_valid_word, Word}, _From, State) ->
     {reply, Reply, NewState};
 
 handle_call({options}, _From, State) ->
-    {ok, Characters} = application:get_env(postfix),
-    io:fwrite("Characters: '~s'~n", [Characters]),
+    {ok, Characters} = application:get_env(characters),
+    error_logger:warning_report({?MODULE, ?LINE, characters, Characters}),
     Reply = ok,
     {reply, Reply, State};
 

@@ -86,7 +86,12 @@ handle_cast({generate_words, Word}, State) ->
  	true ->
 	    wg_dumper:dump_valid_word(Word);
 	false -> 
-	    io:fwrite("No valid word: Skipping '~s'~n", [Word])
+	    error_logger:warning_report(
+	      {?MODULE, 
+	       ?LINE, 
+	       no_valid_word, 
+	       skipping, Word
+	      })
     end,
     case wg_validator:is_candidate(Word) of
 	true ->
@@ -97,7 +102,12 @@ handle_cast({generate_words, Word}, State) ->
 	      end,
 	      Characters);
 	false -> 
-	    io:fwrite("No candidate word: Skipping '~s'~n", [Word])
+	    error_logger:warning_report(
+	      {?MODULE, 
+	       ?LINE, 
+	       no_candidate_word, 
+	       skipping, Word
+	      })
     end,
     {noreply, NewState};
 
