@@ -81,6 +81,7 @@ handle_call({is_candidate, Word}, _From, State) ->
 handle_call({is_valid, Word}, _From, State) ->
     Reply = is_valid_min_length(Word) andalso
 	is_valid_max_length(Word) andalso
+	is_valid_regexps(Word) andalso
 	is_valid_min_char_occurs(Word) andalso
 	is_valid_max_char_occurs(Word) andalso
 	is_valid_max_consecutive_char_occurs(Word),
@@ -188,7 +189,15 @@ is_valid_max_consecutive_char_occurs(Word) ->
 		end,
 		String)
       end, 
-      Value).    
+      Value). 
+   
+is_valid_regexps(Word) ->
+    {ok, Regexps} = application:get_env(regexps),
+    lists:all(
+      fun({Match, RE}) ->
+	      Match == re:run(Word, RE, [{capture, none}])		  
+      end,
+      Regexps).
 
 get_occurrences(Char, String ) ->
     S = [C || C <- String, C == Char],

@@ -14,14 +14,29 @@
                  ]},
   {mod, { ewg_app, []}},
   {env, [
-	 {characters, "acb"},
-	 {min_length, 1},
+	 {characters, "abc123ABC"},
+	 {min_length, 2},
 	 {max_length, 4},
-	 {char_occurs, [{"a",1,4},{"bc",0,3}]},
+	 %% --------------------------------------------------------
+	 %% char_occurs
+	 %% --------------------------------------------------------
+	 %% how many occurrences for each character
+	 %% [{"ab",1,4}] is equal to [{"a",1,4},{"b",1,4}+
+	 {char_occurs, [{"ab",1,4},{"bc",0,3}]},
+	 %% --------------------------------------------------------
+	 %% max_consecutive_char_occurs
+	 %% --------------------------------------------------------
+	 %% how many consecutive occourrences for each character
 	 {max_consecutive_char_occurs, [{"a",1},{"bc",2}]},
+
+
 	 % dumper options
 	 {words_file, "/tmp/words.txt"},
-	 {prefix, "prefix"},
-	 {postfix, "postfix"}
+	 {prefix, ""},
+	 {postfix, ""},
+	 {regexps, [
+		    {match, "^[ac]"},
+		    {nomatch, "^b"}
+		   ]}
   ]}
  ]}.

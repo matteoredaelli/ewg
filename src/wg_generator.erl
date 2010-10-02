@@ -82,6 +82,9 @@ handle_call(_Request, _From, State) ->
 %%--------------------------------------------------------------------
 handle_cast({generate_words, Word}, State) ->
     NewState = State#state{count = State#state.count + 1},
+
+    %% checking if it is a valid word
+
     case wg_validator:is_valid(Word) of
  	true ->
 	    wg_dumper:dump_valid_word(Word);
