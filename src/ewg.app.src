@@ -14,9 +14,19 @@
                  ]},
   {mod, { ewg_app, []}},
   {env, [
+
+	 %% *************************************************
+	 %% * Common options
+	 %% *************************************************
 	 {characters, "abc123ABC"},
+
+
+	 %% *************************************************
+	 %% * Validator options
+	 %% *************************************************
 	 {min_length, 2},
 	 {max_length, 4},
+
 	 %% --------------------------------------------------------
 	 %% char_occurs
 	 %% --------------------------------------------------------
@@ -29,14 +39,17 @@
 	 %% how many consecutive occourrences for each character
 	 {max_consecutive_char_occurs, [{"a",1},{"bc",2}]},
 
-
-	 % dumper options
-	 {words_file, "/tmp/words.txt"},
-	 {prefix, ""},
-	 {postfix, ""},
 	 {regexps, [
 		    {match, "^[ac]"},
 		    {nomatch, "^b"}
-		   ]}
+		   ]},
+
+	 %% *************************************************
+	 %% * dumper options
+	 %% *************************************************
+	 {words_file, "/tmp/words.txt"},
+	 {prefix, ""},
+	 {postfix, ""}
+
   ]}
  ]}.
