@@ -153,44 +153,76 @@ is_valid_max_length(Word) ->
     {ok, Value} = application:get_env(max_length),
     length(Word) =<  Value.
 
+%% ------------------------------------------
+%% is_valid_min_char_occurs
+%% ------------------------------------------
 is_valid_min_char_occurs(Word) ->
     {ok, Value} = application:get_env(char_occurs),
-    lists:all( fun({String, Min, _Max}) ->
-		       lists:all( fun(Char) ->
-					  N = get_occurrences(Char, Word),
-					  N >= Min
-				  end,
-				  String)
-	       end, 
-	       Value).
+    lists:all(
+      fun({String, Min, _Max}) ->
+	      is_valid_min_char_occurs(String, Min, Word)
+      end, 
+      Value
+     ).
+
+is_valid_min_char_occurs(String, Min, Word) ->
+    lists:all(
+      fun(Char) ->
+	      N = get_occurrences(Char, Word),
+	      N >= Min
+      end,
+      String).
+
+%% ------------------------------------------
+%% is_valid_max_char_occurs
+%% ------------------------------------------
 
 is_valid_max_char_occurs(Word) ->
     {ok, Value} = application:get_env(char_occurs),
-    lists:all( fun({String, _Min, Max}) ->
-		       lists:all( fun(Char) ->
-					  N = get_occurrences(Char, Word),
-					  N =< Max
-				  end,
-				  String)
-	       end, 
-	       Value).
+    lists:all( 
+      fun({String, _Min, Max}) ->
+	      is_valid_max_char_occurs(String, Max, Word)
+      end, 
+      Value
+     ).
+
+is_valid_max_char_occurs(String, Max, Word) ->
+    lists:all(
+      fun(Char) ->
+	      N = get_occurrences(Char, Word),
+	      N =< Max
+      end,
+      String
+     ).
+
+%% ------------------------------------------
+%% is_valid_max_consecutive_char_occurs
+%% ------------------------------------------
 
 is_valid_max_consecutive_char_occurs(Word) ->
     {ok, Value} = application:get_env(max_consecutive_char_occurs),
     lists:all( 
       fun({String, Max}) ->
-	      lists:all( 
-		fun(Char) ->
-			Cons = string:chars(Char, Max + 1),
-			case string:str(Word, Cons) of
-			    1 -> false;
-			    0 -> true
-			end
-		end,
-		String)
+	      is_valid_max_consecutive_char_occurs(String, Max, Word)
       end, 
       Value). 
    
+is_valid_max_consecutive_char_occurs(String, Max, Word) ->
+    lists:all( 
+      fun(Char) ->
+	      Cons = string:chars(Char, Max + 1),
+	      case string:str(Word, Cons) of
+		  1 -> false;
+		  0 -> true
+	      end
+      end,
+      String
+     ).
+
+%% ------------------------------------------
+%% is_valid_regexps
+%% ------------------------------------------
+
 is_valid_regexps(Word) ->
     {ok, Regexps} = application:get_env(regexps),
     lists:all(

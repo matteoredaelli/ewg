@@ -71,10 +71,8 @@ handle_call({dump_valid_word, Word}, _From, State) ->
     {ok, Postfix} = application:get_env(postfix),
     {ok, Prefix} = application:get_env(prefix),
     {ok, Words_file} = application:get_env(words_file),
-    NewState = State#state{count = State#state.count + 1},
-    {ok, WriteDescr} = file:open(Words_file, [raw, append]), 
-    file:write(WriteDescr, Prefix ++ Word ++ Postfix ++ "\n"), 
-    file:close(WriteDescr),
+    NewState = State#state{count = State#state.count + 1}, 
+    file:write_file(Words_file, Prefix ++ Word ++ Postfix ++ "\n", [append]), 
     Reply = ok,
     {reply, Reply, NewState};
 
