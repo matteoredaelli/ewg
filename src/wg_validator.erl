@@ -1,16 +1,14 @@
 %%%-------------------------------------------------------------------
 %%% File    : wg_validator.erl
 %%% Author  : Matteo Redaelli <matteo.redaelli@libero.it>
-%%% Description : 
+%%% Description :
 %%% License: GPL V3
-%%% 
+%%%
 %%% Created :  3 Aug 2009 by Matteo Redaelli <matteo.redaelli@libero.it>
 %%%-------------------------------------------------------------------
 -module(wg_validator).
 
 -behaviour(gen_server).
-
--include("ewg.hrl").
 
 -define(SERVER, ?MODULE).
 
@@ -69,7 +67,7 @@ handle_call({is_candidate, Word}, _From, State) ->
     Reply = is_valid_max_length(Word) andalso
 	is_valid_max_char_occurs(Word) andalso
 	is_valid_max_consecutive_char_occurs(Word),
-    NewState = 
+    NewState =
 	case Reply of
 	    true ->
 		State#state{candidate = State#state.candidate + 1};
@@ -85,7 +83,7 @@ handle_call({is_valid, Word}, _From, State) ->
 	is_valid_min_char_occurs(Word) andalso
 	is_valid_max_char_occurs(Word) andalso
 	is_valid_max_consecutive_char_occurs(Word),
-    NewState = 
+    NewState =
 	case Reply of
 	    true ->
 		State#state{valid = State#state.valid + 1};
@@ -95,9 +93,9 @@ handle_call({is_valid, Word}, _From, State) ->
     {reply, Reply, NewState};
 
 handle_call({statistics}, _From, State) ->
-    Reply = "Validator: candidate=" ++ 
+    Reply = "Validator: candidate=" ++
 	integer_to_list(State#state.candidate) ++
-	", valid=" ++ 
+	", valid=" ++
 	integer_to_list(State#state.valid),
     NewState = State,
     {reply, Reply, NewState};
@@ -161,7 +159,7 @@ is_valid_min_char_occurs(Word) ->
     lists:all(
       fun({String, Min, _Max}) ->
 	      is_valid_min_char_occurs(String, Min, Word)
-      end, 
+      end,
       Value
      ).
 
@@ -179,10 +177,10 @@ is_valid_min_char_occurs(String, Min, Word) ->
 
 is_valid_max_char_occurs(Word) ->
     {ok, Value} = application:get_env(char_occurs),
-    lists:all( 
+    lists:all(
       fun({String, _Min, Max}) ->
 	      is_valid_max_char_occurs(String, Max, Word)
-      end, 
+      end,
       Value
      ).
 
@@ -201,14 +199,14 @@ is_valid_max_char_occurs(String, Max, Word) ->
 
 is_valid_max_consecutive_char_occurs(Word) ->
     {ok, Value} = application:get_env(max_consecutive_char_occurs),
-    lists:all( 
+    lists:all(
       fun({String, Max}) ->
 	      is_valid_max_consecutive_char_occurs(String, Max, Word)
-      end, 
-      Value). 
-   
+      end,
+      Value).
+
 is_valid_max_consecutive_char_occurs(String, Max, Word) ->
-    lists:all( 
+    lists:all(
       fun(Char) ->
 	      Cons = string:chars(Char, Max + 1),
 	      case string:str(Word, Cons) of
@@ -227,7 +225,7 @@ is_valid_regexps(Word) ->
     {ok, Regexps} = application:get_env(regexps),
     lists:all(
       fun({Match, RE}) ->
-	      Match == re:run(Word, RE, [{capture, none}])		  
+	      Match == re:run(Word, RE, [{capture, none}])
       end,
       Regexps).
 

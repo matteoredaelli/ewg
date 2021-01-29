@@ -1,55 +1,53 @@
-%% -*- mode: erlang -*-
-
-%% Info about passing params to an erlang app can be found at
-%% http://stackoverflow.com/questions/1213108/erlang-how-to-access-cli-flags-arguments-as-application-environment-variables
-%% http://willcodeforfoo.com/2009/10/04/erlang-application-variables/
 {application, ewg,
- [
-  {description, ""},
-  {vsn, "3.0"},
+ [{description, "Word generator as a  OTP application"},
+  {vsn, "3.0.1"},
   {registered, []},
-  {applications, [
-                  kernel,
-                  stdlib
-                 ]},
-  {mod, { ewg_app, []}},
+  {mod, {ewg_app, []}},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
   {env, [
 
-	 %% *************************************************
-	 %% * Common options
-	 %% *************************************************
-	 {characters, "abc123"},
+	%% *************************************************
+	%% * Common options
+	%% *************************************************
+	{characters, "abc123"},
 
 
-	 %% *************************************************
-	 %% * Validator options
-	 %% *************************************************
-	 {min_length, 1},
-	 {max_length, 2},
+	%% *************************************************
+	%% * Validator options
+	%% *************************************************
+	{min_length, 1},
+	{max_length, 2},
 
-	 %% --------------------------------------------------------
-	 %% char_occurs
-	 %% --------------------------------------------------------
-	 %% how many occurrences for each character
-	 %% [{"ab",1,4}] is equal to [{"a",1,4},{"b",1,4}+
-	 {char_occurs, [{"abc",0,4},{"123",0,3}]},
-	 %% --------------------------------------------------------
-	 %% max_consecutive_char_occurs
-	 %% --------------------------------------------------------
-	 %% how many consecutive occourrences for each character
-	 {max_consecutive_char_occurs, [{"a",1},{"bc",2}]},
+	%% --------------------------------------------------------
+	%% char_occurs
+	%% --------------------------------------------------------
+	%% how many occurrences for each character
+	%% [{"ab",1,4}] is equal to [{"a",1,4},{"b",1,4}+
+	{char_occurs, [{"abc",0,4},{"123",0,3}]},
+	%% --------------------------------------------------------
+	%% max_consecutive_char_occurs
+	%% --------------------------------------------------------
+	%% how many consecutive occourrences for each character
+	{max_consecutive_char_occurs, [{"a",1},{"bc",2}]},
 
-	 {regexps, [
-		    {match, "^[abc]"},
-		    {nomatch, "^[123]"}
-		   ]},
+	{regexps, [
+		   {match, "^[abc]"},
+		   {nomatch, "^[123]"}
+		  ]},
 
-	 %% *************************************************
-	 %% * dumper options
-	 %% *************************************************
-	 {words_file, "/tmp/words.txt"},
-	 {prefix, ""},
-	 {postfix, ""}
+	%% *************************************************
+	%% * dumper options
+	%% *************************************************
+	{words_file, "/tmp/words.txt"},
+	{prefix, ""},
+	{postfix, ""}
 
-  ]}
+  ]},
+  {modules, []},
+
+  {licenses, ["Apache 2.0"]},
+  {links, []}
  ]}.

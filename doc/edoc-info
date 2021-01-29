@@ -1,3 +1,0 @@
-{application,ewg}.
-{packages,[]}.
-{modules,[ewg_app,ewg_sup,wg_dumper,wg_generator,wg_validator]}.

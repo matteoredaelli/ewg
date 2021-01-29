@@ -1,17 +1,13 @@
+%%%-------------------------------------------------------------------
+%% @doc ewg public API
+%% @end
+%%%-------------------------------------------------------------------
+
 -module(ewg_app).
 
 -behaviour(application).
 
-%% Application callbacks
 -export([start/2, stop/1]).
-
--ifdef(TEST).
--include_lib("eunit/include/eunit.hrl").
--endif.
-
-%% ===================================================================
-%% Application callbacks
-%% ===================================================================
 
 start(_StartType, _StartArgs) ->
     ewg_sup:start_link().
@@ -19,10 +15,4 @@ start(_StartType, _StartArgs) ->
 stop(_State) ->
     ok.
 
--ifdef(TEST).
-
-simple_test() ->
-    ok = application:start(ewg),
-    ?assertNot(undefined == whereis(ewg_sup)).
-
--endif.
+%% internal functions

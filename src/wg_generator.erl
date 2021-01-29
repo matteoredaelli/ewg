@@ -1,7 +1,7 @@
 %%%-------------------------------------------------------------------
 %%% File    : wg_generator.erl
 %%% Author  : Matteo Redaelli <matteo.redaelli@libero.it>
-%%% Description : 
+%%% Description :
 %%% License: GPL V3
 %%%
 %%% Created :  3 Aug 2009 by Matteo Redaelli <matteo.redaelli@libero.it>
@@ -9,8 +9,6 @@
 -module(wg_generator).
 
 -behaviour(gen_server).
-
--include("ewg.hrl").
 
 -define(SERVER, ?MODULE).
 
@@ -65,7 +63,7 @@ init([]) ->
 %%--------------------------------------------------------------------
 
 handle_call({statistics}, _From, State) ->
-    Reply = "Generator: count=" ++ 
+    Reply = "Generator: count=" ++
 	integer_to_list(State#state.count),
     NewState = State,
     {reply, Reply, NewState};
@@ -86,29 +84,29 @@ handle_cast({generate_words, Word}, State) ->
     %% checking if it is a valid word
 
     case wg_validator:is_valid(Word) of
- 	true ->
+	true ->
 	    wg_dumper:dump_valid_word(Word);
-	false -> 
+	false ->
 	    error_logger:warning_report(
-	      {?MODULE, 
-	       ?LINE, 
-	       no_valid_word, 
+	      {?MODULE,
+	       ?LINE,
+	       no_valid_word,
 	       skipping, Word
 	      })
     end,
     case wg_validator:is_candidate(Word) of
 	true ->
 	    {ok, Characters} = application:get_env(characters),
-	    lists:foreach( 
-	      fun(X) -> 
-		      spawn(?MODULE, generate_words, [[X] ++ Word]) 
+	    lists:foreach(
+	      fun(X) ->
+		      spawn(?MODULE, generate_words, [[X] ++ Word])
 	      end,
 	      Characters);
-	false -> 
+	false ->
 	    error_logger:warning_report(
-	      {?MODULE, 
-	       ?LINE, 
-	       no_candidate_word, 
+	      {?MODULE,
+	       ?LINE,
+	       no_candidate_word,
 	       skipping, Word
 	      })
     end,

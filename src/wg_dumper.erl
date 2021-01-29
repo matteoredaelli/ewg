@@ -1,7 +1,7 @@
 %%%-------------------------------------------------------------------
 %%% File    : wg_dumper.erl
 %%% Author  : Matteo Redaelli <matteo.redaelli@libero.it>
-%%% Description : 
+%%% Description :
 %%% License: GPL V3
 %%%
 %%% Created :  3 Aug 2009 by Matteo Redaelli <matteo.redaelli@libero.it>
@@ -9,8 +9,6 @@
 -module(wg_dumper).
 
 -behaviour(gen_server).
-
--include("ewg.hrl").
 
 -define(SERVER, ?MODULE).
 
@@ -53,7 +51,7 @@ statistics() ->
 %% Description: Initiates the server
 %%--------------------------------------------------------------------
 init([]) ->
-    % TODO: deleting WORDS_FILE if it exists. 
+    % TODO: deleting WORDS_FILE if it exists.
     {ok, Words_file} = application:get_env(words_file),
     file:delete(Words_file),
     {ok, #state{}}.
@@ -71,8 +69,8 @@ handle_call({dump_valid_word, Word}, _From, State) ->
     {ok, Postfix} = application:get_env(postfix),
     {ok, Prefix} = application:get_env(prefix),
     {ok, Words_file} = application:get_env(words_file),
-    NewState = State#state{count = State#state.count + 1}, 
-    file:write_file(Words_file, Prefix ++ Word ++ Postfix ++ "\n", [append]), 
+    NewState = State#state{count = State#state.count + 1},
+    file:write_file(Words_file, Prefix ++ Word ++ Postfix ++ "\n", [append]),
     Reply = ok,
     {reply, Reply, NewState};
 
@@ -83,7 +81,7 @@ handle_call({options}, _From, State) ->
     {reply, Reply, State};
 
 handle_call({statistics}, _From, State) ->
-    Reply = "Dumper: count=" ++ 
+    Reply = "Dumper: count=" ++
 	integer_to_list(State#state.count),
     NewState = State,
     {reply, Reply, NewState};
